@@ -12,70 +12,68 @@ import dbfw.DBHelp;
 import dbfw.ParamMapper;
 import domain.Student;
 
-public class StudentDAO{
+public class StudentDAO {
 
-	public static List getstudentdetails( int userid, String password)
-	{
-		ConnectionHolder ch=null;
-		Connection con=null;
-		List studentdetails=null;
-		try
-		{
-			ch=ConnectionHolder.getInstance();
-			con=ch.getConnection();
-			 final ParamMapper STUDENTDETAILPMAPPER=new ParamMapper()  // select id, name  from user where id=? password=? 
-					 {
+	public static List<Student> getStudentDetails(int studentId, String password) {
+		ConnectionHolder connectionHolder = null;
+		Connection connection = null;
+		List<Student> studentDetails = null;
+		try {
+			connectionHolder = ConnectionHolder.getInstance();
+			connection = connectionHolder.getConnection();
+			final ParamMapper STUDENT_DETAIL_MAPPER = new ParamMapper() // select id, name from user where id=?
+																		// password=?
+			{
 
-						public void mapParam(PreparedStatement preStmt) throws SQLException {
-						preStmt.setInt(1,userid);
-						preStmt.setString(2,password);						
-						}
-						 
-					};//ananymous class
-				studentdetails=DBHelp.executeSelect(con,SQLMapper.FetchStudentLogin,SQLMapper.STUDENTDETAILMAPPER, STUDENTDETAILPMAPPER );	
-					
+				public void mapParam(PreparedStatement preStmt) throws SQLException {
+					preStmt.setInt(1, studentId);
+					preStmt.setString(2, password);
+				}
+
+			};
+			studentDetails = DBHelp.executeSelect(connection, SQLMapper.FetchStudentDetail,
+					SQLMapper.STUDENT_MAPPER,
+					STUDENT_DETAIL_MAPPER);
+
 		} catch (DBCException e) {
-			
+
 			e.printStackTrace();
 		}
-		return 	studentdetails;
-					
-		}
-	public static int studentInsert(Student s) throws DBException 
-	{
-		int result=0;
-		ConnectionHolder ch=null;
-		Connection con=null;
-		List studentdetails=null;
-		try
-		{
-			ch=ConnectionHolder.getInstance();
-			con=ch.getConnection();
-			 final ParamMapper INSERTPSTUDENT=new ParamMapper()  // select id, name  from user where id=? password=? 
-					 {
 
-						public void mapParam(PreparedStatement preStmt) throws SQLException {
-						preStmt.setInt(1,s.getS_userid());
-						preStmt.setInt(2,s.getS_rollid());
-						preStmt.setString(3, s.getS_email());
-						preStmt.setString(4,s.getS_mobile());
-						preStmt.setString(5, s.getS_password().toString());
-												
-						}
-						
-					};//ananymous class
-					result=DBHelp.executeUpdate(con,SQLMapper.InsertStudent,INSERTPSTUDENT );	
-					
-		} catch (DBCException e) {
-			
-			e.printStackTrace();
-		}
-		
-					
-		return result;
-		
-		
+		return studentDetails;
+
 	}
-		
+
+	public static int createNewStudent(Student student) throws DBException {
+		int result = 0;
+		ConnectionHolder connectionHolder = null;
+		Connection connection = null;
+		try {
+			connectionHolder = ConnectionHolder.getInstance();
+			connection = connectionHolder.getConnection();
+			final ParamMapper INSERT_NEW_STUDENT = new ParamMapper() // select id, name from user where id=? password=?
+			{
+
+				public void mapParam(PreparedStatement preStmt) throws SQLException {
+					preStmt.setInt(1, student.getStudentId());
+					preStmt.setString(2, student.getStudentName());
+					preStmt.setString(3, student.getPassword());
+					preStmt.setString(4, student.getEmail());
+					preStmt.setString(5, student.getContactNumber());
+
+				}
+
+			};
+
+			result = DBHelp.executeUpdate(connection, SQLMapper.InsertStudent, INSERT_NEW_STUDENT);
+
+		} catch (DBCException e) {
+
+			e.printStackTrace();
+		}
+
+		return result;
+
+	}
 
 }

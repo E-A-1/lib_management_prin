@@ -1,50 +1,59 @@
 package domain;
 
-public class Student 
-{
-	private int s_userid;
-	private int s_rollid;
-	private String s_email;
-	private String s_mobile;
-	private String s_password;
-	public Student(int s_userid, int s_rollid, String s_email, String s_mobile, String s_password) 
-	{
-		super();
-		this.s_userid = s_userid;
-		this.s_rollid = s_rollid;
-		this.s_email = s_email;
-		this.s_mobile = s_mobile;
-		this.s_password = s_password;
+public class Student {
+	private int studentId;
+	private String studentName;
+
+	public int getStudentId() {
+		return studentId;
 	}
-	public int getS_userid() {
-		return s_userid;
+
+	public void setStudentId(int studentId) {
+		this.studentId = studentId;
 	}
-	public void setS_userid(int s_userid) {
-		this.s_userid = s_userid;
+
+	public Student(int studentId, String studentName, String password, String email, String contactNumber) {
+		this.studentId = studentId;
+		this.studentName = studentName;
+		this.password = password;
+		this.email = email;
+		this.contactNumber = contactNumber;
 	}
-	public int getS_rollid() {
-		return s_rollid;
+
+	public String getStudentName() {
+		return studentName;
 	}
-	public void setS_rollid(int s_rollid) {
-		this.s_rollid = s_rollid;
+
+	public void setStudentName(String studentName) {
+		this.studentName = studentName;
 	}
-	public String getS_email() {
-		return s_email;
+
+	public String getPassword() {
+		return password;
 	}
-	public void setS_email(String s_email) {
-		this.s_email = s_email;
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
-	public String getS_mobile() {
-		return s_mobile;
+
+	public String getEmail() {
+		return email;
 	}
-	public void setS_mobile(String s_mobile) {
-		this.s_mobile = s_mobile;
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
-	public String getS_password() {
-		return s_password;
+
+	public String getContactNumber() {
+		return contactNumber;
 	}
-	public void setS_password(String s_password) {
-		this.s_password = s_password;
+
+	public void setContactNumber(String contactNumber) {
+		this.contactNumber = contactNumber;
 	}
-	
+
+	private String password;
+	private String email;
+	private String contactNumber;
+
 }

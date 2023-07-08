@@ -19,55 +19,56 @@ import domain.Admin;
 public class AdminDAO
 
 {
-	public static List getadmindetails(int userid, String password) {
-		ConnectionHolder ch = null;
-		Connection con = null;
-		List admindetails = null;
+	public static List<Admin> getAdminDetails(int adminId, String password) {
+		ConnectionHolder connectionHolder = null;
+		Connection connection = null;
+		List<Admin> adminDetails = null;
 		try {
-			ch = ConnectionHolder.getInstance();
-			con = ch.getConnection();
-			final ParamMapper ADMINDETAILPMAPPER = new ParamMapper() // select id, name from user where id=? password=?
+			connectionHolder = ConnectionHolder.getInstance();
+			connection = connectionHolder.getConnection();
+			final ParamMapper READ_ADMIN_MAPPER = new ParamMapper() // select id, name from user where id=? password=?
 			{
 
 				public void mapParam(PreparedStatement preStmt) throws SQLException {
-					preStmt.setInt(1, userid);
+					preStmt.setInt(1, adminId);
 					preStmt.setString(2, password);
 				}
 
-			};// ananymous class
-			admindetails = DBHelp.executeSelect(con, SQLMapper.FetchAdminLogin, SQLMapper.ADMINDETAILMAPPER,
-					ADMINDETAILPMAPPER);
+			};
+
+			adminDetails = DBHelp.executeSelect(connection, SQLMapper.FetchAdminLogin, SQLMapper.ADMIN_MAPPER,
+					READ_ADMIN_MAPPER);
 
 		} catch (DBCException e) {
 
 			e.printStackTrace();
 		}
-		return admindetails;
+		return adminDetails;
 
 	}
 
-	public static int adminInsert(Admin a) throws DAOException, DBException {
+	public static int insertAdmin(Admin admin) throws DAOException, DBException {
 		int result = 0;
-		ConnectionHolder ch = null;
-		Connection con = null;
-		List admindetails = null;
+		ConnectionHolder connectionHolder = null;
+		Connection connection = null;
 		try {
-			ch = ConnectionHolder.getInstance();
-			con = ch.getConnection();
-			final ParamMapper INSERTPADMIN = new ParamMapper() // select id, name from user where id=? password=?
+			connectionHolder = ConnectionHolder.getInstance();
+			connection = connectionHolder.getConnection();
+			final ParamMapper INSERT_ADMIN = new ParamMapper() // select id, name from user where id=? password=?
 			{
 
 				public void mapParam(PreparedStatement preStmt) throws SQLException {
-					preStmt.setInt(1, a.getA_userid());
-					preStmt.setInt(2, a.getA_rollid());
-					preStmt.setString(3, a.getA_email());
-					preStmt.setString(4, a.getA_mobile());
-					preStmt.setString(5, a.getA_password());
+					preStmt.setInt(1, admin.getAdminId());
+					preStmt.setString(2, admin.getAdminName());
+					preStmt.setString(3, admin.getEmail());
+					preStmt.setString(4, admin.getPassword());
+					preStmt.setString(5, admin.getContactNumber());
 
 				}
 
-			};// ananymous class
-			result = DBHelp.executeUpdate(con, SQLMapper.InsertAdmin, INSERTPADMIN);
+			};
+
+			result = DBHelp.executeUpdate(connection, SQLMapper.InsertAdmin, INSERT_ADMIN);
 
 		} catch (DBCException e) {
 

@@ -1,57 +1,59 @@
 package domain;
 
-public class Admin
-{
-	private int a_userid;
-	private int a_rollid;
-	private String a_email;
-	private String a_mobile;
-	private String a_password;
-	public Admin(int a_userid, int a_rollid, String a_email, String a_mobile, String a_password)
-	{
-		super();
-		this.a_userid = a_userid;
-		this.a_rollid = a_rollid;
-		this.a_email = a_email;
-		this.a_mobile = a_mobile;
-		this.a_password = a_password;
+public class Admin {
+	private int adminId;
+	private String adminName;
+	private String password;
+
+	public int getAdminId() {
+		return adminId;
 	}
-	public int getA_userid() {
-		return a_userid;
+
+	public Admin(int adminId, String adminName, String password, String email, String contactNumber) {
+		this.adminId = adminId;
+		this.adminName = adminName;
+		this.password = password;
+		this.email = email;
+		this.contactNumber = contactNumber;
 	}
-	public void setA_userid(int a_userid) {
-		this.a_userid = a_userid;
+
+	public void setAdminId(int adminId) {
+		this.adminId = adminId;
 	}
-	public int getA_rollid() {
-		return a_rollid;
+
+	public String getAdminName() {
+		return adminName;
 	}
-	public void setA_rollid(int a_rollid) {
-		this.a_rollid = a_rollid;
+
+	public void setAdminName(String adminName) {
+		this.adminName = adminName;
 	}
-	public String getA_email() {
-		return a_email;
+
+	public String getPassword() {
+		return password;
 	}
-	public void setA_email(String a_email) {
-		this.a_email = a_email;
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
-	public String getA_mobile() {
-		return a_mobile;
+
+	public String getEmail() {
+		return email;
 	}
-	public void setA_mobile(String a_mobile) {
-		this.a_mobile = a_mobile;
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
-	public String getA_password() {
-		return a_password;
+
+	public String getContactNumber() {
+		return contactNumber;
 	}
-	public void setA_password(String a_password) {
-		this.a_password = a_password;
+
+	public void setContactNumber(String contactNumber) {
+		this.contactNumber = contactNumber;
 	}
-	@Override
-	public String toString() {
-		return "Admin [a_userid=" + a_userid + ", a_rollid=" + a_rollid + ", a_email=" + a_email + ", a_mobile="
-				+ a_mobile + ", a_password=" + a_password + "]";
-	}
-	
-	
+
+	private String email;
+	private String contactNumber;
 
 }
