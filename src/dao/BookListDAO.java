@@ -19,6 +19,7 @@ public class BookListDAO {
 
 	static Logger log = Logger.getLogger(BookListDAO.class);
 
+	// To list all the books
 	public static List<BookDetails> getBooks() throws DBException, DAOException, DBCException {
 		List<BookDetails> books = null;
 		ConnectionHolder connectionHolder = null;
@@ -50,6 +51,7 @@ public class BookListDAO {
 		}
 	}
 
+	// To create new book
 	public static int createNewBook(BookDetails book) throws DAOException, DBException {
 		int result = 0;
 		ConnectionHolder connectionHolder = null;
@@ -87,6 +89,7 @@ public class BookListDAO {
 
 	}
 
+	// To search book
 	public static List<BookDetails> searchBook(String name) {
 
 		ConnectionHolder connectionHolder = null;
@@ -117,181 +120,7 @@ public class BookListDAO {
 
 	}
 
-	public static int insertrequest(int bookid, int userid) throws DAOException, DBException {
-		int result = 0;
-		ConnectionHolder connectionHolder = null;
-		Connection connection = null;
-		List admindetails = null;
-
-		;
-		try {
-			connectionHolder = ConnectionHolder.getInstance();
-			connection = connectionHolder.getConnection();
-			final ParamMapper INSERTPBOOKREQ = new ParamMapper() // select id, name from user where id=? password=?
-			{
-
-				public void mapParam(PreparedStatement preStmt) throws SQLException {
-					preStmt.setInt(1, bookid);
-
-					System.out.println("Enter the date on requested in yy/mm/dd");
-					Scanner sc = new Scanner(System.in);
-					String date = sc.next();
-
-					preStmt.setString(2, date);
-
-					preStmt.setInt(3, userid);
-
-				}
-
-			};// ananymous class
-			result = DBHelp.executeUpdate(connection, SQLMapper.InsertBookReq, INSERTPBOOKREQ);
-
-		} catch (DBCException e) {
-
-			e.printStackTrace();
-		}
-
-		return result;
-
-	}
-
-	public static List UserHireBooks(int userid) {
-		ConnectionHolder connectionHolder = null;
-		Connection connection = null;
-		List BookReq = null;
-
-		try {
-			connectionHolder = ConnectionHolder.getInstance();
-			connection = connectionHolder.getConnection();
-
-			final ParamMapper BOOKREQPMAPPER = new ParamMapper() // select id, name from user where id=? password=?
-			{
-
-				public void mapParam(PreparedStatement preStmt) throws SQLException {
-					preStmt.setInt(1, userid);
-
-				}
-
-			};// ananymous class
-
-			BookReq = DBHelp.executeSelect(connection, SQLMapper.RetriveBookHireDetails, SQLMapper.BOOKHIRELISTMAPPER,
-					BOOKREQPMAPPER);
-
-		} catch (DBCException e) {
-
-			e.printStackTrace();
-		}
-		return BookReq;
-
-	}
-
-	public static List UserReqBooks(int userid) {
-		ConnectionHolder connectionHolder = null;
-		Connection connection = null;
-		List BookReq = null;
-
-		try {
-			connectionHolder = ConnectionHolder.getInstance();
-			connection = connectionHolder.getConnection();
-
-			final ParamMapper BOOKREQPMAPPER = new ParamMapper() // select id, name from user where id=? password=?
-			{
-
-				public void mapParam(PreparedStatement preStmt) throws SQLException {
-					preStmt.setInt(1, userid);
-
-				}
-
-			};// ananymous class
-
-			BookReq = DBHelp.executeSelect(connection, SQLMapper.FetchBookReqDetails, SQLMapper.BOOKREQLISTMAPPER,
-					BOOKREQPMAPPER);
-
-		} catch (DBCException e) {
-
-			e.printStackTrace();
-		}
-		return BookReq;
-
-	}
-
-	public static List getReqBooks(int bookid) {
-		ConnectionHolder connectionHolder = null;
-		Connection connection = null;
-		List BookReq = null;
-
-		try {
-			connectionHolder = ConnectionHolder.getInstance();
-			connection = connectionHolder.getConnection();
-
-			final ParamMapper BOOKREQPMAPPER = new ParamMapper() // select id, name from user where id=? password=?
-			{
-
-				public void mapParam(PreparedStatement preStmt) throws SQLException {
-					preStmt.setInt(1, bookid);
-
-				}
-
-			};// ananymous class
-
-			BookReq = DBHelp.executeSelect(connection, SQLMapper.RetriveBookReqDetails, SQLMapper.BOOKREQLISTMAPPER,
-					BOOKREQPMAPPER);
-
-		} catch (DBCException e) {
-
-			e.printStackTrace();
-		}
-		return BookReq;
-
-	}
-
-	public static int insertconformation(int bookid, String Name, int ISBN, String Author, String Publisher,
-			String Edition, double price, int quantity, int userid, String returndate, int hireid)
-			throws DAOException, DBException {
-		int result = 0;
-		// int quantity=1;
-		ConnectionHolder connectionHolder = null;
-		Connection connection = null;
-		List admindetails = null;
-
-		;
-		try {
-			connectionHolder = ConnectionHolder.getInstance();
-			connection = connectionHolder.getConnection();
-			final ParamMapper INSERTCONFORMATIONREQ = new ParamMapper() // select id, name from user where id=?
-																		// password=?
-			{
-
-				public void mapParam(PreparedStatement preStmt) throws SQLException {
-					preStmt.setInt(1, bookid);
-					preStmt.setString(2, Name);
-					preStmt.setInt(3, ISBN);
-					preStmt.setString(4, Author);
-					preStmt.setString(5, Publisher);
-					preStmt.setString(6, Edition);
-					preStmt.setDouble(7, price);
-					preStmt.setInt(8, quantity);
-
-					Scanner sc = new Scanner(System.in);
-					System.out.println("Enter the date that book to be return in  yy/mm/dd");
-					String returndate = sc.next();
-					preStmt.setString(9, returndate);
-					preStmt.setInt(10, userid);
-					preStmt.setInt(11, hireid);
-				}
-
-			};// ananymous class
-			result = DBHelp.executeUpdate(connection, SQLMapper.InsertReqConformation, INSERTCONFORMATIONREQ);
-
-		} catch (DBCException e) {
-
-			e.printStackTrace();
-		}
-
-		return result;
-
-	}
-
+	// To get the book using book id
 	public static List<BookDetails> getBookUsingBookId(int bookId) throws DBException, DAOException, DBCException {
 		List<BookDetails> books = null;
 		ConnectionHolder connectionHolder = null;
@@ -332,9 +161,64 @@ public class BookListDAO {
 		}
 	}
 
-	public static void insertconformation(int bookid, String name, int iSBN, String author, String publisher,
-			String edition, Double price, int quantity, String returndate, int hireid, int userid) {
+	// to update the book
+	public static int updateBookList(int id, int quantity) throws DAOException, DBException {
+		int result = 0;
+		ConnectionHolder ch = null;
+		Connection con = null;
 
+		try {
+			ch = ConnectionHolder.getInstance();
+			con = ch.getConnection();
+
+			final ParamMapper UPDATE_BOOK_LIST_PARAM_MAPPER = new ParamMapper() // select id, name from user where id=?
+			// password=?
+			{
+
+				public void mapParam(PreparedStatement preStmt) throws SQLException {
+					preStmt.setInt(1, quantity);
+					preStmt.setInt(2, id);
+
+				}
+
+			};
+
+			result = DBHelp.executeUpdate(con, SQLMapper.UpdateBook, UPDATE_BOOK_LIST_PARAM_MAPPER);
+
+		} catch (DBCException e) {
+
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	public static int deleteBook(int bookId) throws DAOException, DBException {
+		int result = 0;
+		ConnectionHolder ch = null;
+		Connection con = null;
+
+		try {
+			ch = ConnectionHolder.getInstance();
+			con = ch.getConnection();
+
+			final ParamMapper DELETE_BOOK_PARAM_MAPPER = new ParamMapper() // select id, name from user where id=?
+			// password=?
+			{
+
+				public void mapParam(PreparedStatement preStmt) throws SQLException {
+					preStmt.setInt(1, bookId);
+
+				}
+
+			};
+
+			result = DBHelp.executeUpdate(con, SQLMapper.DeleteBook, DELETE_BOOK_PARAM_MAPPER);
+
+		} catch (DBCException e) {
+
+			e.printStackTrace();
+		}
+		return result;
 	}
 
 }

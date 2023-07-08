@@ -76,4 +76,32 @@ public class StudentDAO {
 
 	}
 
+	public static int deleteStudent(int id) throws DAOException, DBException {
+		int result = 0;
+		ConnectionHolder ch = null;
+		Connection con = null;
+
+		try {
+			ch = ConnectionHolder.getInstance();
+			con = ch.getConnection();
+
+			final ParamMapper DELETE_STUDENT_PARAM_MAPPER = new ParamMapper() // select id, name from user where id=?
+																				// password=?
+			{
+
+				public void mapParam(PreparedStatement preStmt) throws SQLException {
+
+					preStmt.setInt(1, id);
+
+				}
+
+			};// ananymous class
+			result = DBHelp.executeUpdate(con, SQLMapper.DeleteStudent, DELETE_STUDENT_PARAM_MAPPER);
+
+		} catch (DBCException e) {
+
+			e.printStackTrace();
+		}
+		return result;
+	}
 }

@@ -9,6 +9,7 @@ import domain.Admin;
 import domain.BookHireList;
 import domain.BookDetails;
 import domain.BookReqList;
+import domain.BookRequest;
 import domain.Student;
 
 public class SQLMapper {
@@ -21,8 +22,8 @@ public class SQLMapper {
 	public static final String FetchAdminLogin = "select * from Admins where admin_id=? and password=?";
 	public static final String FetchStudentDetail = "select * from student where student_id=? and password=?";
 	public static final String SearchBookUsingBookName = "select * from bookdetails where book_name=? ";
-	public static final String FetchBookReqDetails = "select * from bookreqlist where userid=?";
-	public static final String RetriveBookReqDetails = "select * from bookhiredetails where bookid=?";
+	public static final String FetchBookReqDetailsUsingUserId = "select * from BookRequest where student_id=?";
+	public static final String RetriveBookReqDetails = "select * from BookRequest where book_id=?";
 	public static final String FetchReqBook = "select * from bookslist where BookID=? and quantity>0";
 	public static final String FetchAdmin = "select * from admin";
 	public static final String GetAllStudents = "select * from student";
@@ -32,7 +33,11 @@ public class SQLMapper {
 	public static final String RetriveBookHireDetails = "select * from bookhiredetails where userid=?";
 	public static final String CancelHire = "Delete from BookHireDetails where hireid=? ";
 	public static final String GetBookByBookId = "select * from bookdetails where book_id=?";
+	public static final String INSERT_BOOK_REQUEST = "insert into BookRequest values(?,?,?,?)";
 
+	public static final String DELETE_BOOK_REQUEST = "delete from BookRequest where requestid=?";
+
+	public static final String UPDATE_BOOK_REQUEST = " update BookRequest set status =?";
 	public static final ResultMapper ADMIN_MAPPER = new ResultMapper() {
 
 		public Object mapRow(ResultSet rs) throws SQLException {
@@ -92,17 +97,17 @@ public class SQLMapper {
 
 	};
 	// Anonymous class
-	public static final ResultMapper BOOKREQLISTMAPPER = new ResultMapper() {
+	public static final ResultMapper BOOK_REQUEST_LIST_MAPPER = new ResultMapper() {
 
 		public Object mapRow(ResultSet rs) throws SQLException {
 
-			int book_id = rs.getInt(1);
-			String date = rs.getString(2);
-			int userid = rs.getInt(3);
+			int requestId = rs.getInt(1);
+			int studentId = rs.getInt(2);
+			int bookId = rs.getInt(3);
+			String status = rs.getString(4);
 
-			BookReqList brl = new BookReqList(book_id, date, userid);
-
-			return brl;
+			BookRequest bookRequest = new BookRequest(requestId, studentId, bookId, status);
+			return bookRequest;
 		}
 
 		// mapRow

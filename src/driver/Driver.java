@@ -2,10 +2,12 @@ package driver;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 import java.util.Scanner;
 import dbfw.DBException;
 import dao.AdminDAO;
 import dao.BookListDAO;
+import dao.BookRequestDAO;
 import dao.DAOException;
 import dao.StudentDAO;
 import dbc.DBCException;
@@ -13,6 +15,7 @@ import domain.Admin;
 import domain.BookHireList;
 import domain.BookDetails;
 import domain.BookReqList;
+import domain.BookRequest;
 import domain.Student;
 import service.AdminService;
 import service.BookDetailsService;
@@ -61,7 +64,7 @@ public class Driver {
 							System.out.println("Enter 4 to search for the Book details");
 							System.out.println("Enter 5 to delete for the Student details");
 							System.out.println("Enter 6 to delete for the Book details");
-							// System.out.println("Select 7 to update Book details");
+							System.out.println("Select 7 to confirm Book requests");
 
 							System.out.println();
 							System.out.println("---------------------------------------------");
@@ -77,21 +80,22 @@ public class Driver {
 
 									break;
 								case 3:
-									createbook();
+									BookDetailsService.createNewBook();
+									;
 									break;
 								case 4:
-									getbooklist();
+									BookDetailsService.getBookList();
 									break;
 								case 5:
 									StudentService.deleteStudent();
 									break;
 								case 6:
-									deletebook();
+									BookDetailsService.deleteBook();
 									break;
 
-								// case 7:
-								// updateBookList();
-								// break;
+								case 7:
+									// confirm book request
+									break;
 
 								default:
 									System.out.println("Please select the value with in the options");
@@ -113,11 +117,11 @@ public class Driver {
 					List list1 = null;
 					System.out.println("Enter Loginid of student");
 
-					int Loginid = scanner.nextInt();
+					int studentId = scanner.nextInt();
 					System.out.println("Enter  password of student");
 					String password1 = scanner.next();
 
-					list1 = StudentDAO.getStudentDetails(Loginid, password1);
+					list1 = StudentDAO.getStudentDetails(studentId, password1);
 					if (!(list1.isEmpty())) {
 						System.out.println("Login sucessfull");
 						System.out.println(
@@ -142,19 +146,26 @@ public class Driver {
 									BookDetailsService.getBookList();
 									break;
 								case 2:
-									BookDetailsService.searchBook(Loginid);
+									BookDetailsService.searchBook(studentId);
 									break;
 								case 3:
 									BookDetailsService.getBookList();
 									System.out.println("Enter book id");
 									int bookid = scanner.nextInt();
-									requestbook(bookid, Loginid);
+									Random random = new Random();
+									int maxDigits = 100000;
+									int randomNumber = random.nextInt(maxDigits);
+									BookRequest bookRequest = new BookRequest(randomNumber, studentId, bookid,
+											"requested");
+									BookRequestDAO.addNewBookRequest(bookRequest);
 									break;
 								case 4:
-									confirmreq(Loginid);
+									// see all the confirmed requests
+									// confirmreq(Loginid);
 									break;
 								case 5:
-									returnbook(Loginid);
+									// to be implemented
+									// returnbook(Loginid);
 									break;
 								default:
 									System.out.println("Please select the value with in the given options");
@@ -184,157 +195,4 @@ public class Driver {
 
 	}
 
-	// for student insert;
-
-	// to create new book
-
-	// to delete book
-	public static void deletebook() throws DAOException, DBException, DBCException {
-		int result = 0;
-		boolean pendingbooks = false;
-		Scanner sc = new Scanner(System.in);
-		System.out.println("Provide the bookid to be deleted");
-		int bookid = sc.nextInt();
-		List booklist = null;
-		booklist = BookListDAO.getReqBooks(bookid);
-		if (!(booklist.isEmpty())) {
-
-			for (Iterator it = booklist.iterator(); it.hasNext();) {
-				BookReqList brl = (BookReqList) it.next();
-			}
-			System.out.println("some books are still at students so unable to delete the books");
-		}
-
-		else {
-			result = AdminDAO.deletebook(bookid);
-			if (result != 0) {
-				System.out.println("deleted the book");
-			} else
-				System.out.println("not deleted the book");
-		}
-	}
-
-	public static void requestbook(int Bookid, int userid) throws DAOException, DBException {
-		BookListDAO.insertrequest(Bookid, userid);
-
-		System.out.println(
-				"To Complete your request please confirm your request in confirm request option from login menu");
-
-	}
-
-	// to confirm requested book
-	public static void confirmreq(int userid) throws DAOException, DBException, DBCException {
-		Scanner sc = new Scanner(System.in);
-		boolean bool = false;
-		int quantity = 0;
-		int hireid = 0;
-		int Bookid = 0;
-		int Reqid = 0;
-		String Name = "";
-		String Edition = "";
-		String Publisher = "";
-		String Author = "";
-		Double price = 0.0;
-		int ISBN = 0;
-		List list2 = null;
-		String returndate = "";
-		int result = 0;
-		List booklist = null;
-		booklist = BookListDAO.UserReqBooks(userid);
-		if (!(booklist.isEmpty())) {
-			for (Iterator it = booklist.iterator(); it.hasNext();) {
-				BookReqList brl = (BookReqList) it.next();
-				System.out.println(brl.getUserid() + " " + brl.getBook_id() + "  " + brl.getDate());
-
-			}
-
-			System.out.println(" enter the user id to be confirmed and that is based on the requested date");
-			userid = sc.nextInt();
-			System.out.println(" enter the book id to be confirmed and that is based on your requested date");
-			Bookid = sc.nextInt();
-			list2 = AdminDAO.requestbook(Bookid);
-			if (!(list2.isEmpty())) {
-				bool = true;
-				for (Iterator it = list2.iterator(); it.hasNext();) {
-					BookDetails b = (BookDetails) it.next();
-					quantity = b.getQuantity();
-				}
-				int updated_quantity = quantity - 1;
-				if (bool) {
-					booklist = BookListDAO.Books(Bookid);
-					if (!(booklist.isEmpty())) {
-						for (Iterator it = booklist.iterator(); it.hasNext();) {
-							BookDetails bl = (BookDetails) it.next();
-							Name = bl.getB_name();
-							ISBN = bl.getB_isbn();
-							Author = bl.getB_author();
-							Edition = bl.getB_edition();
-							Publisher = bl.getB_publisher();
-							price = bl.getPrice();
-
-						}
-					}
-					System.out.println("confirmed the request for requestedbook .. waiting for admin approval");
-					BookListDAO.insertconformation(Bookid, Name, ISBN, Author, Publisher, Edition, price, quantity,
-							returndate, hireid,
-							userid);
-
-					AdminDAO.updateBookList(Bookid, updated_quantity);
-					System.out.println("Request for book is accepted ,,Please collect it from the Library Incharge");
-
-				}
-
-			} else {
-				System.out.println("Sorry!! book is not available for now. You can request it on some other day");
-			}
-		} else
-			System.out.println("you have not requested any book yet");
-
-	}
-
-	// to return book
-	public static void returnbook(int userid) throws DAOException, DBException, DBCException
-
-	{
-
-		int result = 0;
-		int quantity = 0;
-		List booklist = null;
-
-		booklist = BookListDAO.UserHireBooks(userid);
-		if (!(booklist.isEmpty())) {
-
-			for (Iterator it = booklist.iterator(); it.hasNext();) {
-				BookHireList bhl = (BookHireList) it.next();
-				System.out.println(bhl.getHireid() + " " + bhl.getB_id() + "  " + bhl.getReturndate());
-
-			}
-			Scanner sc = new Scanner(System.in);
-			System.out.println("Press enter the hire id you want to return");
-			int hireid = sc.nextInt();
-			System.out.println("Press enter the book id you want to return");
-			int bookid = sc.nextInt();
-			result = AdminDAO.deletehiredbook(hireid);
-
-			List list2 = null;
-			list2 = AdminDAO.requestbook(bookid);
-
-			if (!(list2.isEmpty())) {
-
-				for (Iterator it = list2.iterator(); it.hasNext();) {
-					BookDetails b = (BookDetails) it.next();
-					quantity = b.getQuantity();
-				}
-			}
-			int updated_quantity = quantity + 1;
-			AdminDAO.updateBookList(bookid, updated_quantity);
-			if (result != 0) {
-				System.out.println("returned");
-			} else
-				System.out.println("not returned");
-
-		} else {
-			System.out.println("Sorry!! No books has taken by the user with user id" + userid);
-		}
-	}
 }

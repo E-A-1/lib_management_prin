@@ -4,11 +4,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 
+import dao.AdminDAO;
 import dao.BookListDAO;
+import dao.BookRequestDAO;
 import dao.DAOException;
 import dbc.DBCException;
 import dbfw.DBException;
 import domain.BookDetails;
+import domain.BookReqList;
 
 public class BookDetailsService {
     public static void getBookList() throws DBException, DAOException, DBCException {
@@ -96,6 +99,31 @@ public class BookDetailsService {
             System.out.println("new book created successfully");
         } else {
             System.out.println("Failed to create the new book");
+        }
+    }
+
+    public static void deleteBook() throws DAOException, DBException, DBCException {
+        int result = 0;
+        boolean pendingbooks = false;
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Provide the bookid to be deleted");
+        int bookid = sc.nextInt();
+        List booklist = null;
+        booklist = BookRequestDAO.getRequestsUsingBookId(bookid);
+        if (!(booklist.isEmpty())) {
+
+            for (Iterator it = booklist.iterator(); it.hasNext();) {
+                BookReqList brl = (BookReqList) it.next();
+            }
+            System.out.println("some books are still at students so unable to delete the books");
+        }
+
+        else {
+            result = BookListDAO.deleteBook(bookid);
+            if (result != 0) {
+                System.out.println("deleted the book");
+            } else
+                System.out.println("not deleted the book");
         }
     }
 
