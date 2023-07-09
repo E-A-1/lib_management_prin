@@ -97,6 +97,7 @@ public class Driver {
 								case 7:
 									System.out.println("Requests available to confirm");
 									BookRequestDAO.getAllRequestToBeConfirmedByTheAdmin();
+									System.out.println(" ------------ ");
 									int requestId = scanner.nextInt();
 									BookRequestDAO.updateStatus("confirmed", requestId);
 									break;
@@ -140,8 +141,10 @@ public class Driver {
 							System.out.println("Select 1 to know the list of books present in the library");
 							System.out.println("Select 2 for search the book");
 							System.out.println("Select 3 for request the book from library");
-							System.out.println("Select 4 for Confirm the Request for a selected book ");
+							System.out.println("Select 4 to see the open request ");
 							System.out.println("Select 5 to Return the book to the library");
+							System.out.println("Select 6 to see the books returned to the library");
+
 							System.out.println();
 							System.out.println("------------------------------------------------------");
 							System.out.println();
@@ -160,11 +163,11 @@ public class Driver {
 									int maxDigits = 100000;
 									int randomNumber = random.nextInt(maxDigits);
 									BookRequest bookRequest = new BookRequest(randomNumber, studentId, bookid,
-											"requested");
+											"open");
 									BookRequestDAO.addNewBookRequest(bookRequest);
 									break;
 								case 4:
-									System.out.println("----- The open request are below ------------");
+									System.out.println("----- The open book request are below ------------");
 									BookRequestDAO.getBooksRequestByUser(studentId, "open");
 
 									break;
@@ -179,7 +182,7 @@ public class Driver {
 
 									break;
 								case 6:
-									System.out.println("----- The returned book request are below ------------");
+									System.out.println("----- The returned book requests are below ------------");
 									BookRequestDAO.getBooksRequestByUser(studentId, "closed");
 
 									break;

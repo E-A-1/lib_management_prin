@@ -22,6 +22,8 @@ public class SQLMapper {
 	public static final String FetchStudentDetail = "select * from student where student_id=? and password=?";
 	public static final String SearchBookUsingBookName = "select * from bookdetails where book_name=? ";
 	public static final String FetchBookReqDetailsUsingUserId = "select * from BookRequest where student_id=? and status=?";
+	public static final String FetchAllNotReturnedBookRequest = "select * from BookRequest where student_id=? and status = 'open' or status = 'confirmed'";
+
 	public static final String RetriveBookReqDetails = "select * from BookRequest where book_id=? and status 'confirmed'";
 	public static final String RetriveBookReqDetailsUsingRequestId = "select * from BookRequest where requestid=?";
 	public static final String RetrieveRequestsToBeConfirmedByAdmin = "select * from BookRequest where status='open'";

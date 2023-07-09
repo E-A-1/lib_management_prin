@@ -6,6 +6,8 @@ import java.util.Scanner;
 
 import dao.AdminDAO;
 import dao.BookListDAO;
+import dao.BookRequestDAO;
+import dao.BookReturnDAO;
 import dao.DAOException;
 import dao.StudentDAO;
 import dbc.DBCException;
@@ -47,15 +49,15 @@ public class StudentService {
         System.out.println("Enter the student id to be deleted");
         int studentId = scanner.nextInt();
 
-        List booklist = BookListDAO.UserHireBooks(studentId);
+        List booklist = BookRequestDAO.getAllBooksInCompleteRequestByUser(studentId);
         if (!(booklist.isEmpty())) {
 
             for (Iterator it = booklist.iterator(); it.hasNext();) {
                 BookHireList brl = (BookHireList) it.next();
             }
-            System.out.println("please return the book to library to delete your credentials");
+            System.out.println("This student has to return the book to library , so couldn't delete");
         } else {
-            result = AdminDAO.deletestudent(studentId);
+            result = StudentDAO.deleteStudent(studentId);
             if (result != 0) {
                 System.out.println("Deleted the student");
             } else

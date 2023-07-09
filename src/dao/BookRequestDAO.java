@@ -135,6 +135,42 @@ public class BookRequestDAO {
 
     }
 
+    public static List<BookRequest> getAllBooksInCompleteRequestByUser(int userid) {
+        ConnectionHolder connectionHolder = null;
+        Connection connection = null;
+        List<BookRequest> reqBooks = null;
+
+        try {
+            connectionHolder = ConnectionHolder.getInstance();
+            connection = connectionHolder.getConnection();
+
+            final ParamMapper BOOK_REQ_PARAM_MAPPER = new ParamMapper() {
+
+                public void mapParam(PreparedStatement preStmt) throws SQLException {
+                    preStmt.setInt(1, userid);
+
+                }
+
+            };
+            reqBooks = DBHelp.executeSelect(connection, SQLMapper.FetchAllNotReturnedBookRequest,
+                    SQLMapper.BOOK_REQUEST_LIST_MAPPER,
+                    BOOK_REQ_PARAM_MAPPER);
+
+            for (BookRequest bookRequest : reqBooks) {
+
+                System.out.println(
+                        "Request Id ->" + bookRequest.getRequestId() + ", Status ->" + bookRequest.getStatus());
+                System.out.println(" --------- ");
+            }
+
+        } catch (DBCException e) {
+
+            e.printStackTrace();
+        }
+        return reqBooks;
+
+    }
+
     public static List<BookRequest> getRequestsUsingBookId(int bookId) {
         ConnectionHolder connectionHolder = null;
         Connection connection = null;
