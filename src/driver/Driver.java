@@ -8,6 +8,7 @@ import dbfw.DBException;
 import dao.AdminDAO;
 import dao.BookListDAO;
 import dao.BookRequestDAO;
+import dao.BookReturnDAO;
 import dao.DAOException;
 import dao.StudentDAO;
 import dbc.DBCException;
@@ -22,7 +23,7 @@ import service.BookDetailsService;
 import service.StudentService;
 
 public class Driver {
-	public static void main(String[] args) throws DBException, DAOException, DBCException
+	public static void main(String[] args) throws Exception
 
 	{
 		int n = 0;
@@ -94,7 +95,10 @@ public class Driver {
 									break;
 
 								case 7:
-									// confirm book request
+									System.out.println("Requests available to confirm");
+									BookRequestDAO.getAllRequestToBeConfirmedByTheAdmin();
+									int requestId = scanner.nextInt();
+									BookRequestDAO.updateStatus("confirmed", requestId);
 									break;
 
 								default:
@@ -160,12 +164,24 @@ public class Driver {
 									BookRequestDAO.addNewBookRequest(bookRequest);
 									break;
 								case 4:
-									// see all the confirmed requests
-									// confirmreq(Loginid);
+									System.out.println("----- The open request are below ------------");
+									BookRequestDAO.getBooksRequestByUser(studentId, "open");
+
 									break;
 								case 5:
-									// to be implemented
-									// returnbook(Loginid);
+									System.out.println("----- The books borrowed -----");
+									System.out.println(" ");
+									BookRequestDAO.getBooksRequestByUser(studentId, "confirmed");
+									System.out.println(" ");
+									System.out.println("Enter the requestId to return the book");
+									int requestId = scanner.nextInt();
+									BookReturnDAO.returnBook(requestId);
+
+									break;
+								case 6:
+									System.out.println("----- The returned book request are below ------------");
+									BookRequestDAO.getBooksRequestByUser(studentId, "closed");
+
 									break;
 								default:
 									System.out.println("Please select the value with in the given options");
