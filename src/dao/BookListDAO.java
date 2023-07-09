@@ -6,8 +6,6 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
 
-import org.apache.log4j.Logger;
-
 import dbc.ConnectionHolder;
 import dbc.DBCException;
 import dbfw.DBException;
@@ -16,8 +14,6 @@ import dbfw.ParamMapper;
 import domain.BookDetails;
 
 public class BookListDAO {
-
-	static Logger log = Logger.getLogger(BookListDAO.class);
 
 	// To list all the books
 	public static List<BookDetails> getBooks() throws DBException, DAOException, DBCException {
@@ -28,7 +24,6 @@ public class BookListDAO {
 			try {
 				connectionHolder = ConnectionHolder.getInstance();
 				connection = connectionHolder.getConnection();
-				log.debug("fetching"); //
 
 				books = DBHelp.executeSelect(connection, SQLMapper.FetchBookList, SQLMapper.BOOK_MAPPER);
 
@@ -129,7 +124,6 @@ public class BookListDAO {
 			try {
 				connectionHolder = ConnectionHolder.getInstance();
 				connection = connectionHolder.getConnection();
-				log.debug("fetching"); //
 				final ParamMapper GET_BOOK_PARAM_MAPPER = new ParamMapper() // select id, name from user where id=?
 																			// password=?
 				{

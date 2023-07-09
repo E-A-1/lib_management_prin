@@ -17,27 +17,28 @@ public class SQLMapper {
 	public static final String InsertStudent = "insert into student values(?,?,?,?,?)";
 	public static final String InsertBook = "insert into bookdetails values(?,?,?,?,?,?,?,?,?)";
 	public static final String InsertBookReq = "insert into Bookreqlist(BookID,Req_date,userid) values(?,?,?)";
-	public static final String InsertReqConformation = "insert into BookHireDetails(HireId,Bookid,bookName,ISBN,author,publisher,edition,price,quantity,returndate,userid) values(?,?,?,?,?,?,?,?,?,?,?)";
 	public static final String UpdateBook = "update bookdetails set quantity=? where book_id=?";
 	public static final String FetchAdminLogin = "select * from Admins where admin_id=? and password=?";
 	public static final String FetchStudentDetail = "select * from student where student_id=? and password=?";
 	public static final String SearchBookUsingBookName = "select * from bookdetails where book_name=? ";
-	public static final String FetchBookReqDetailsUsingUserId = "select * from BookRequest where student_id=?";
-	public static final String RetriveBookReqDetails = "select * from BookRequest where book_id=?";
+	public static final String FetchBookReqDetailsUsingUserId = "select * from BookRequest where student_id=? and status=?";
+	public static final String RetriveBookReqDetails = "select * from BookRequest where book_id=? and status 'confirmed'";
+	public static final String RetriveBookReqDetailsUsingRequestId = "select * from BookRequest where requestid=?";
+	public static final String RetrieveRequestsToBeConfirmedByAdmin = "select * from BookRequest where status='open'";
 	public static final String FetchReqBook = "select * from bookslist where BookID=? and quantity>0";
 	public static final String FetchAdmin = "select * from admin";
 	public static final String GetAllStudents = "select * from student";
 	public static final String FetchBookList = "select * from bookdetails";
 	public static final String DeleteStudent = "delete from student where student_id=?";
 	public static final String DeleteBook = "delete from bookdetails where book_id=?";
-	public static final String RetriveBookHireDetails = "select * from bookhiredetails where userid=?";
-	public static final String CancelHire = "Delete from BookHireDetails where hireid=? ";
 	public static final String GetBookByBookId = "select * from bookdetails where book_id=?";
 	public static final String INSERT_BOOK_REQUEST = "insert into BookRequest values(?,?,?,?)";
 
 	public static final String DELETE_BOOK_REQUEST = "delete from BookRequest where requestid=?";
 
-	public static final String UPDATE_BOOK_REQUEST = " update BookRequest set status =?";
+	public static final String UPDATE_BOOK_REQUEST = " update BookRequest set status =? where requestid=?";
+	public static final String INSERT_INTO_BOOK_RETURN = "insert into bookreturn values(?,?,?)";
+
 	public static final ResultMapper ADMIN_MAPPER = new ResultMapper() {
 
 		public Object mapRow(ResultSet rs) throws SQLException {
